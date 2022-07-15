@@ -19,7 +19,7 @@
     "redux": "^4.2.0"
   },
   "scripts": {
-    "start": "react-dotenv && react-scripts start",
+    "start": "react-dotenv && react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build"
   },
   "browserslist": {
