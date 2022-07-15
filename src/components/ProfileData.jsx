@@ -8,10 +8,6 @@ export const ProfileData = (props) => {
     console.log(props.graphData);
 
     return (
-        <div id="profile-div">
-            <p><strong>First Name: </strong> {props.graphData.givenName}</p>
-            <p><strong>Last Name: </strong> {props.graphData.surname}</p>
-            <p><strong>Email: </strong> {props.graphData.mail}</p>
-        </div>
+        <a>{props.graphData.givenName} {props.graphData.surname} - {props.graphData.mail}</a>
     );
 };
