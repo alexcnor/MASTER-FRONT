@@ -66,7 +66,7 @@ export default class Componente extends React.Component {
           <div className="col-12 col-sm-6">
             <div className="form-group">
               <label htmlFor="clienteInput">Cliente</label>
-              <input type="password" className="form-control" id="clienteInput" name="cliente" value={this.state.cliente} placeholder="Nombre del cliente o proyecto relacionado. Ej: Core, Tecnoandina" onChange={this.handleInputChange} />
+              <input type="text" className="form-control" id="clienteInput" name="cliente" value={this.state.cliente} placeholder="Nombre del cliente o proyecto relacionado. Ej: Core, Tecnoandina" onChange={this.handleInputChange} />
             </div>
           </div>
           <div className="col-12 col-sm-6">
