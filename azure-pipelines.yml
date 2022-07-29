@@ -29,9 +29,10 @@ stages:
               command: custom
               customCommand: run build
               verbose: true
+          - bash: 'cd $(Build.SourcesDirectory) && ls -la'
           - task: PublishPipelineArtifact@1
             inputs:
-              targetPath: '$(Build.ArtifactStagingDirectory)'
+              targetPath: '$(Build.SourcesDirectory)'
               artifactName: 'build'
               artifactType: 'pipeline'
   - stage: security
