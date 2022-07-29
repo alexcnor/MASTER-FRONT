@@ -31,7 +31,7 @@ stages:
               verbose: true
           - bash: 'cd $(Build.SourcesDirectory) && ls -la'
           - script: |
-              sed -i "s/((version))/$(imageTag)/" ./k8s/definition.yaml
+              sed -i "s/((image))/$(imageTag)/" ./k8s/definition.yaml
           - task: ArchiveFiles@2
             displayName: 'Archive files'
             inputs:
@@ -44,7 +44,6 @@ stages:
             inputs:
               targetPath: '$(Build.SourcesDirectory)/build.zip'
               artifactName: 'build'
-              artifactType: 'pipeline'
   - stage: security
     dependsOn: build
     displayName: Snyk Security Scan
@@ -128,7 +127,6 @@ stages:
             inputs:
               targetPath: '$(Build.ArtifactStagingDirectory)'
               artifactName: 'image'
-              artifactType: 'pipeline'
   - stage:
     dependsOn: ['docker', 'security']
     displayName: Publish Artifact
