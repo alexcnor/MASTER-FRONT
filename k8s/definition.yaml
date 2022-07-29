@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: service-catalog-front
-          image: tecnoandina01.azurecr.io/((image))
+          image: tecnoandina01.azurecr.io/service-catalog-front:latest
           ports:
             - containerPort: 80
           resources:
@@ -23,15 +23,4 @@ spec:
               memory: 128Mi
       imagePullSecrets:
         - name: tecnoregistry
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: service-catalog-front-service
-spec:
-  type: LoadBalancer
-  selector:
-    ip-service: service-catalog-front
-  ports:
-    - port: 80
-      targetPort: 80
+
