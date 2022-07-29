@@ -44,7 +44,7 @@ stages:
               targetPath: '$(Build.ArtifactStagingDirectory)'
               artifactName: 'build'
               artifactType: 'pipeline'
-  - stage:
+  - stage: docker
     dependsOn: build
     displayName: Build Docker Images
     jobs:
@@ -82,7 +82,7 @@ stages:
               artifactName: 'image'
               artifactType: 'pipeline'
   - stage:
-    dependsOn: build
+    dependsOn: docker
     displayName: Publish Artifact
     jobs:
       - job:
