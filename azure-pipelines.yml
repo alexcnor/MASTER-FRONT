@@ -116,8 +116,11 @@ stages:
               SourceFolder: '$(Build.SourcesDirectory)/k8s'
               Contents: '*'
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
-              CleanTargetFolder: true
+              CleanTargetFolder: false
               preserveTimestamp: true
+          - script: |
+              echo $(tag) > $(Build.ArtifactStagingDirectory)/tag.txt
+            displayName: 'Save tag to get in release pipeline'
           - bash: 'cd $(Build.ArtifactStagingDirectory) && ls -la'
           - task: PublishPipelineArtifact@1
             inputs:
