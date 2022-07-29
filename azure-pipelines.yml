@@ -119,7 +119,7 @@ stages:
               CleanTargetFolder: false
               preserveTimestamp: true
           - script: |
-              echo $(tag) > $(Build.ArtifactStagingDirectory)/tag.txt
+              echo $(imageTag) > $(Build.ArtifactStagingDirectory)/tag.txt
             displayName: 'Save tag to get in release pipeline'
           - bash: 'cd $(Build.ArtifactStagingDirectory) && ls -la'
           - task: PublishPipelineArtifact@1
