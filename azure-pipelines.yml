@@ -10,21 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 stages:
-  - stage: security
-    displayName: Snyk Security Scan
-    jobs:
-      - job:
-        steps:
-          - task: SnykSecurityScan@1
-            inputs:
-              serviceConnectionEndpoint: 'Snyk'
-              testType: 'app'
-              monitorWhen: 'always'
-              failOnIssues: false
-              projectName: 'front'
-              organization: 'c60c0b73-b647-496b-874f-f4487ef9d092'
   - stage: build
-    dependsOn: security
     displayName: Build
     jobs:
       - job:
@@ -44,8 +30,27 @@ stages:
               targetPath: '$(Build.ArtifactStagingDirectory)'
               artifactName: 'build'
               artifactType: 'pipeline'
-  - stage: docker
+  - stage: security
     dependsOn: build
+    displayName: Snyk Security Scan
+    jobs:
+      - job:
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              source: 'current'
+              artifact: 'builf'
+              path: '$(Build.SourcesDirectory)'
+          - task: SnykSecurityScan@1
+            inputs:
+              serviceConnectionEndpoint: 'Snyk'
+              testType: 'app'
+              monitorWhen: 'always'
+              failOnIssues: false
+              projectName: 'front'
+              organization: 'c60c0b73-b647-496b-874f-f4487ef9d092'
+  - stage: docker
+    dependsOn: security
     displayName: Build Docker Images
     jobs:
       - job:
