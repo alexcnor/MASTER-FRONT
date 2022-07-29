@@ -30,6 +30,8 @@ stages:
               customCommand: run build
               verbose: true
           - bash: 'cd $(Build.SourcesDirectory) && ls -la'
+          - script: |
+              sed -i "s/((version))/$(imageTag)/" ./k8s/definition.yaml
           - task: ArchiveFiles@2
             displayName: 'Archive files'
             inputs:
