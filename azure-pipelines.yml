@@ -59,7 +59,7 @@ stages:
             inputs:
               archiveFilePatterns: '**/*.zip'
               destinationFolder: '$(Build.SourcesDirectory)'
-              cleanDestinationFolder: true
+              cleanDestinationFolder: false
               overwriteExistingFiles: true
           - bash: 'cd $(Build.SourcesDirectory) && ls -la'
           - task: SnykSecurityScan@1
@@ -86,7 +86,7 @@ stages:
             inputs:
               archiveFilePatterns: '**/*.zip'
               destinationFolder: '$(Build.SourcesDirectory)'
-              cleanDestinationFolder: true
+              cleanDestinationFolder: false
               overwriteExistingFiles: true
           - bash: 'cd $(Build.SourcesDirectory) && ls -la'
           - task: Docker@2
