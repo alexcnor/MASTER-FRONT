@@ -1,0 +1,100 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+  - master
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: security
+    displayName: Snyk Security Scan
+    jobs:
+      - job:
+        steps:
+          - task: SnykSecurityScan@1
+            inputs:
+              serviceConnectionEndpoint: 'Snyk'
+              testType: 'app'
+              monitorWhen: 'always'
+              failOnIssues: false
+              projectName: 'front'
+              organization: 'c60c0b73-b647-496b-874f-f4487ef9d092'
+  - stage: build
+    dependsOn: security
+    displayName: Build
+    jobs:
+      - job:
+        steps:
+          - task: Npm@1
+            displayName: Install dependecies
+            inputs:
+              command: install
+          - task: Npm@1
+            displayName: Transpile Code
+            inputs:
+              command: custom
+              customCommand: run build
+              verbose: true
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: '$(Build.ArtifactStagingDirectory)'
+              artifactName: 'build'
+              artifactType: 'pipeline'
+  - stage:
+    dependsOn: build
+    displayName: Build Docker Images
+    jobs:
+      - job:
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              source: 'current'
+              artifact: 'builf'
+              path: '$(Build.SourcesDirectory)'
+          - task: Docker@2
+            displayName: Docker Build
+            inputs:
+              command: build
+              repository: front
+              arguments: --no-cache
+              tags: |
+                latest
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+                script: |
+                  docker image save -o $(Build.SourcesDirectory)/image.tar front:latest
+          - task: CopyFiles@2
+            displayName: 'Copy Files to publish'
+            inputs:
+              SourceFolder: '$(Build.SourcesDirectory)'
+              Contents: 'image.tar'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)'
+              CleanTargetFolder: true
+              preserveTimestamp: true
+          - task: PublishPipelineArtifact@1
+              inputs:
+                targetPath: '$(Build.ArtifactStagingDirectory)'
+                artifactName: 'image'
+                artifactType: 'pipeline'
+  - stage:
+    dependsOn: build
+    displayName: Publish Artifact
+    jobs:
+      - job:
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              source: 'current'
+              artifact: 'image'
+              path: '$(Build.ArtifactStagingDirectory)'
+          - bash: 'cd $(Build.ArtifactStagingDirectory) && ls -la'
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifact'
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'docker'
