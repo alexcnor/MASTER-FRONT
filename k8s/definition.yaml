@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-catalog-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ip-service: service-catalog-front
+  template:
+    metadata:
+      labels:
+        ip-service: service-catalog-front
+    spec:
+      containers:
+        - name: service-catalog-front
+          image: tecnoandina01.azurecr.io/{{image}}
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+      imagePullSecrets:
+        - name: tecnoregistry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-catalog-front-service
+spec:
+  type: LoadBalancer
+  selector:
+    ip-service: service-catalog-front
+  ports:
+    - port: 80
+      targetPort: 80

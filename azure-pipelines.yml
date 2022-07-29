@@ -9,6 +9,10 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  imageName: 'service-catalog-front'
+  imageTag: 'v1.0.$(build.buildId)'
+
 stages:
   - stage: build
     displayName: Build
@@ -39,7 +43,7 @@ stages:
           - task: DownloadPipelineArtifact@2
             inputs:
               source: 'current'
-              artifact: 'builf'
+              artifact: 'build'
               path: '$(Build.SourcesDirectory)'
           - task: SnykSecurityScan@1
             inputs:
@@ -64,23 +68,32 @@ stages:
             displayName: Docker Build
             inputs:
               command: build
-              repository: front
+              repository: $(imageName)
               arguments: --no-cache
               tags: |
-                latest
+                $(imageTag)
           - task: PowerShell@2
             inputs:
               targetType: 'inline'
               script: |
-                  docker image save -o $(Build.SourcesDirectory)/image.tar front:latest
+                  docker image save -o $(Build.SourcesDirectory)/image.tar $(imageName):$(imageTag)
           - task: CopyFiles@2
-            displayName: 'Copy Files to publish'
+            displayName: 'Copy Files images'
             inputs:
               SourceFolder: '$(Build.SourcesDirectory)'
               Contents: 'image.tar'
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
               CleanTargetFolder: true
               preserveTimestamp: true
+          - task: CopyFiles@2
+            displayName: 'Copy Files kubernetes definition'
+            inputs:
+              SourceFolder: '$(Build.SourcesDirectory)/k8s'
+              Contents: '*'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)'
+              CleanTargetFolder: true
+              preserveTimestamp: true
+          - bash: 'cd $(Build.ArtifactStagingDirectory) && ls -la'
           - task: PublishPipelineArtifact@1
             inputs:
               targetPath: '$(Build.ArtifactStagingDirectory)'
@@ -102,4 +115,4 @@ stages:
             displayName: 'Publish Artifact'
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'docker'
+              ArtifactName: 'service-catalog'
