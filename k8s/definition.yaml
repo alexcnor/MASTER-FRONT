@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: service-catalog-front
-          image: tecnoandina01.azurecr.io/{{image}}
+          image: tecnoandina01.azurecr.io/((image))
           ports:
             - containerPort: 80
           resources:
