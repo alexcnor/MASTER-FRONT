@@ -30,9 +30,17 @@ stages:
               customCommand: run build
               verbose: true
           - bash: 'cd $(Build.SourcesDirectory) && ls -la'
+          - task: ArchiveFiles@2
+            displayName: 'Archive files'
+            inputs:
+              rootFolderOrFile: '$(Build.SourcesDirectory)'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.SourcesDirectory)/build.zip'
+              replaceExistingArchive: true
           - task: PublishPipelineArtifact@1
             inputs:
-              targetPath: '$(Build.SourcesDirectory)'
+              targetPath: '$(Build.SourcesDirectory)/build.zip'
               artifactName: 'build'
               artifactType: 'pipeline'
   - stage: security
@@ -46,6 +54,14 @@ stages:
               source: 'current'
               artifact: 'build'
               path: '$(Build.SourcesDirectory)'
+          - bash: 'cd $(Build.SourcesDirectory) && ls -la'
+          - task: ExtractFiles@1
+            inputs:
+              archiveFilePatterns: '/*.zip'
+              destinationFolder: '$(Build.SourcesDirectory)'
+              cleanDestinationFolder: true
+              overwriteExistingFiles: true
+          - bash: 'cd $(Build.SourcesDirectory) && ls -la'
           - task: SnykSecurityScan@1
             inputs:
               serviceConnectionEndpoint: 'Snyk'
@@ -55,7 +71,7 @@ stages:
               projectName: 'front'
               organization: 'c60c0b73-b647-496b-874f-f4487ef9d092'
   - stage: docker
-    dependsOn: security
+    dependsOn: build
     displayName: Build Docker Images
     jobs:
       - job:
@@ -63,8 +79,16 @@ stages:
           - task: DownloadPipelineArtifact@2
             inputs:
               source: 'current'
-              artifact: 'builf'
+              artifact: 'build'
               path: '$(Build.SourcesDirectory)'
+          - bash: 'cd $(Build.SourcesDirectory) && ls -la'
+          - task: ExtractFiles@1
+            inputs:
+              archiveFilePatterns: '/*.zip'
+              destinationFolder: '$(Build.SourcesDirectory)'
+              cleanDestinationFolder: true
+              overwriteExistingFiles: true
+          - bash: 'cd $(Build.SourcesDirectory) && ls -la'
           - task: Docker@2
             displayName: Docker Build
             inputs:
@@ -101,7 +125,7 @@ stages:
               artifactName: 'image'
               artifactType: 'pipeline'
   - stage:
-    dependsOn: docker
+    dependsOn: ['docker', 'security']
     displayName: Publish Artifact
     jobs:
       - job:
