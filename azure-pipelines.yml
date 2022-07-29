@@ -57,7 +57,7 @@ stages:
           - bash: 'cd $(Build.SourcesDirectory) && ls -la'
           - task: ExtractFiles@1
             inputs:
-              archiveFilePatterns: '/*.zip'
+              archiveFilePatterns: '**/*.zip'
               destinationFolder: '$(Build.SourcesDirectory)'
               cleanDestinationFolder: true
               overwriteExistingFiles: true
@@ -84,7 +84,7 @@ stages:
           - bash: 'cd $(Build.SourcesDirectory) && ls -la'
           - task: ExtractFiles@1
             inputs:
-              archiveFilePatterns: '/*.zip'
+              archiveFilePatterns: '**/*.zip'
               destinationFolder: '$(Build.SourcesDirectory)'
               cleanDestinationFolder: true
               overwriteExistingFiles: true
