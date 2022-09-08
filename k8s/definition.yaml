@@ -6,8 +6,7 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      ip-service: service-catalog-front
+    ip-service: service-catalog-front
   template:
     metadata:
       labels:
@@ -32,8 +31,7 @@ metadata:
   namespace: service-catalog
 spec:
   selector:
-    matchLabels:
-      ip-service: service-catalog-front
+    ip-service: service-catalog-front
   ports:
     - port: 80
       targetPort: 80
