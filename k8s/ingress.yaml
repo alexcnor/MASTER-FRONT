@@ -309,7 +309,7 @@ spec:
             - --validating-webhook=:8443
             - --validating-webhook-certificate=/usr/local/certificates/cert
             - --validating-webhook-key=/usr/local/certificates/key
-            - --default-ssl-certificate=ingress/tecnoandina-cert
+            - --default-ssl-certificate=default/tecnoandina-cert
             - --ingress-class=ingress-nginx
           securityContext:
             capabilities:
