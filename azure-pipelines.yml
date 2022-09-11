@@ -19,9 +19,9 @@ stages:
     displayName: Init
     jobs:
       - job:
-          steps:
-            - script: |
-                echo "Working"
+        steps:
+          - script: |
+              echo "Working"
   - stage: build
     displayName: Build
     dependsOn: init
