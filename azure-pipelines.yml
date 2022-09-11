@@ -15,7 +15,7 @@ variables:
   imageTag: 'v1.0.$(build.buildId)'
 
 stages:
-  - state: init
+  - stage: init
     displayName: Init
     jobs:
       - job:
