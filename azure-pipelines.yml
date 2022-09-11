@@ -22,56 +22,12 @@ stages:
         steps:
           - script: |
               echo "Working"
-  - stage: build
-    displayName: Build
-    dependsOn: init
-    jobs:
-      - job:
-        steps:
-          - task: Npm@1
-            displayName: Install dependecies
-            inputs:
-              command: install
-          - task: Npm@1
-            displayName: Transpile Code
-            inputs:
-              command: custom
-              customCommand: run build
-              verbose: true
-          - bash: 'cd $(Build.SourcesDirectory) && ls -la'
-          - script: |
-              sed -i "s/latest/$(imageTag)/" ./k8s/definition.yaml
-          - task: ArchiveFiles@2
-            displayName: 'Archive files'
-            inputs:
-              rootFolderOrFile: '$(Build.SourcesDirectory)'
-              includeRootFolder: false
-              archiveType: 'zip'
-              archiveFile: '$(Build.SourcesDirectory)/build.zip'
-              replaceExistingArchive: true
-          - task: PublishPipelineArtifact@1
-            inputs:
-              targetPath: '$(Build.SourcesDirectory)/build.zip'
-              artifactName: 'build'
   - stage: security
-    dependsOn: build
+    dependsOn: init
     displayName: Snyk Security Scan
     jobs:
       - job:
         steps:
-          - task: DownloadPipelineArtifact@2
-            inputs:
-              source: 'current'
-              artifact: 'build'
-              path: '$(Build.SourcesDirectory)'
-          - bash: 'cd $(Build.SourcesDirectory) && ls -la'
-          - task: ExtractFiles@1
-            inputs:
-              archiveFilePatterns: '**/*.zip'
-              destinationFolder: '$(Build.SourcesDirectory)'
-              cleanDestinationFolder: false
-              overwriteExistingFiles: true
-          - bash: 'cd $(Build.SourcesDirectory) && ls -la'
           - task: SnykSecurityScan@1
             inputs:
               serviceConnectionEndpoint: 'Snyk'
