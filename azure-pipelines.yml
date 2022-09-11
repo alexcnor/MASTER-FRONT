@@ -73,24 +73,10 @@ stages:
               projectName: 'front'
               organization: 'c60c0b73-b647-496b-874f-f4487ef9d092'
   - stage: docker
-    dependsOn: build
     displayName: Build Docker Images
     jobs:
       - job:
         steps:
-          - task: DownloadPipelineArtifact@2
-            inputs:
-              source: 'current'
-              artifact: 'build'
-              path: '$(Build.SourcesDirectory)'
-          - bash: 'cd $(Build.SourcesDirectory) && ls -la'
-          - task: ExtractFiles@1
-            inputs:
-              archiveFilePatterns: '**/*.zip'
-              destinationFolder: '$(Build.SourcesDirectory)'
-              cleanDestinationFolder: false
-              overwriteExistingFiles: true
-          - bash: 'cd $(Build.SourcesDirectory) && ls -la'
           - task: Docker@2
             displayName: Docker Build
             inputs:
