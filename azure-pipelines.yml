@@ -10,6 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
+  group: FRONT-SERVICE-CATALOG
   imageName: 'service-catalog-front'
   imageTag: 'v1.0.$(build.buildId)'
 
@@ -95,7 +96,7 @@ stages:
             inputs:
               command: build
               repository: $(imageName)
-              arguments: --no-cache
+              arguments: --build-arg CLIENT_ID=$(CLIENT_ID) --build-arg TENANT_ID=$(TENANT_ID) --build-arg REDIRECT_URI=$(REDIRECT_URI) --no-cache
               tags: |
                 $(imageTag)
           - task: PowerShell@2
