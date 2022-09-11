@@ -15,8 +15,16 @@ variables:
   imageTag: 'v1.0.$(build.buildId)'
 
 stages:
+  - state: init
+    displayName: Init
+    jobs:
+      - job:
+          steps:
+            - script: |
+                echo "Working"
   - stage: build
     displayName: Build
+    dependsOn: init
     jobs:
       - job:
         steps:
@@ -74,6 +82,7 @@ stages:
               organization: 'c60c0b73-b647-496b-874f-f4487ef9d092'
   - stage: docker
     displayName: Build Docker Images
+    dependsOn: init
     jobs:
       - job:
         steps:
