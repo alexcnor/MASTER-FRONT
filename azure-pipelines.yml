@@ -67,6 +67,9 @@ stages:
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
               CleanTargetFolder: true
               preserveTimestamp: true
+          - script: |
+              sed -i "s/latest/$(imageTag)/" ./k8s/definition.yaml
+            displayName: 'Set version in Kubernetes definition'
           - task: CopyFiles@2
             displayName: 'Copy Files kubernetes definition'
             inputs:
