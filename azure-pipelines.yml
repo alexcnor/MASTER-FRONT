@@ -28,6 +28,10 @@ stages:
     jobs:
       - job:
         steps:
+          - task: Npm@1
+            displayName: Install dependecies
+            inputs:
+              command: install
           - task: SnykSecurityScan@1
             inputs:
               serviceConnectionEndpoint: 'Snyk'
