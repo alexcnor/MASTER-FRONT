@@ -6,13 +6,18 @@
 trigger:
   - master
 
+resources:
+  - repo: self
+
 pool:
   vmImage: ubuntu-latest
 
 variables:
-  group: FRONT-SERVICE-CATALOG
-  imageName: 'service-catalog-front'
-  imageTag: 'v1.0.$(build.buildId)'
+  - group: FRONT-SERVICE-CATALOG
+  - name: 'imageName'
+    value: 'service-catalog-front'
+  - name: 'imageTag'
+    value: 'v1.0.$(build.buildId)'
 
 stages:
   - stage: init
@@ -54,6 +59,7 @@ stages:
               arguments: --build-arg CLIENT_ID=$(CLIENT_ID) --build-arg TENANT_ID=$(TENANT_ID) --build-arg REDIRECT_URI=$(REDIRECT_URI) --no-cache
               tags: |
                 $(imageTag)
+            env:
           - task: PowerShell@2
             inputs:
               targetType: 'inline'
