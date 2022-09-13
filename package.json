@@ -22,6 +22,9 @@
     "react-scripts": "^4.0.2",
     "redux": "^4.2.0"
   },
+  "devDependencies": {
+    "typescript": "4.7.4"
+  },
   "scripts": {
     "start": "react-dotenv && react-scripts --openssl-legacy-provider start",
     "build": "set GENERATE_SOURCEMAP=false && react-scripts --max_old_space_size=4096 build"
