@@ -1,5 +1,5 @@
 import { LogLevel } from "@azure/msal-browser";
-import env from "react-dotenv"
+
 
 /**
  * Configuration object to be passed to MSAL instance on creation.
@@ -8,9 +8,9 @@ import env from "react-dotenv"
  */
 export const msalConfig = {
     auth: {
-        clientId: env.CLIENT_ID,
-        authority: `https://login.microsoftonline.com/${env.TENANT_ID}`,
-        redirectUri: env.REDIRECT_URI
+        clientId: process.env.REACT_APP_CLIENT_ID,
+        authority: `https://login.microsoftonline.com/${process.env.REACT_APP_TENANT_ID}`,
+        redirectUri: process.env.REACT_APP_REDIRECT_URI
     },
     cache: {
         cacheLocation: "sessionStorage", // This configures where your cache will be stored
