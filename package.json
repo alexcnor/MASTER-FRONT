@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "react-dotenv && react-scripts --openssl-legacy-provider start",
-    "build": "set GENERATE_SOURCEMAP=false && react-scripts build"
+    "build": "set GENERATE_SOURCEMAP=false && react-scripts --max_old_space_size=4096 build"
   },
   "browserslist": {
     "production": [
