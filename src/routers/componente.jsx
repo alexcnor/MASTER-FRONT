@@ -8,9 +8,10 @@ export default class Componente extends React.Component {
       ambiente: '',
       cliente: '',
       tipoComponente: '',
+      resourceGroup: '',
       componente: '',
       vmSize: '',
-      numero_nodos: null,
+      numero_nodos: '',
       tier: '',
       version: '',
       storage: '',
@@ -79,6 +80,15 @@ export default class Componente extends React.Component {
               </select>
             </div>
           </div>
+          <div className="col-12 col-sm-6">
+            <div className="form-group">
+              <label htmlFor="resourceGroupSelect">Grupo de Recurso</label>
+              <select className="form-control" id="resourceGroupSelect" name="resourceGroup" value={this.state.resourceGroup} onChange={this.handleInputChange}>
+                <option value="">Seleccione un grupo</option>
+                <option value="RG-Service-Catalog">RG-Service-Catalog</option>
+              </select>
+            </div>
+          </div>
           {conditionalForm}
           {(this.state.componente === 'kubernetes cluster' && this.state.tipoComponente === 'infraestructura') &&
             <React.Fragment>
@@ -137,7 +147,7 @@ export default class Componente extends React.Component {
               </div>
             </React.Fragment>
           }
-          <div className={'col text-center ' + (this.state.tipoComponente === 'infraestructura' ? '' : 'd-flex align-items-end')}>
+          <div className="col-12 col-sm-12">
             <div className="form-group">
               <button type="submit" className="btn btn-primary">Enviar</button>
             </div>
