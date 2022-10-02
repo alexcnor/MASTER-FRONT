@@ -1,8 +1,3 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
   - master
 
@@ -56,7 +51,7 @@ stages:
             inputs:
               command: build
               repository: $(imageName)
-              arguments: --build-arg CLIENT_ID=$(CLIENT_ID) --build-arg TENANT_ID=$(TENANT_ID) --build-arg REDIRECT_URI=$(REDIRECT_URI) --no-cache
+              arguments: --build-arg CLIENT_ID=$(CLIENT_ID) --build-arg TENANT_ID=$(TENANT_ID) --build-arg REDIRECT_URI=$(REDIRECT_URI) --build-arg BACKEND=$(BACKEND) --no-cache
               tags: |
                 $(imageTag)
           - task: PowerShell@2

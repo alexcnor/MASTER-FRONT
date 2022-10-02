@@ -63,3 +63,13 @@ spec:
                 name: service-catalog
                 port:
                   number: 80
+    - host: api-service-catalog-dev.tecnoandina.cl
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: service-catalog-backend
+                port:
+                  number: 8080

@@ -5,13 +5,13 @@ export default class Componente extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ambiente: '',
-      cliente: '',
+      environment: '',
+      client: '',
       tipoComponente: '',
       resourceGroup: '',
       componente: '',
       vmSize: '',
-      numero_nodos: '',
+      nodeNumber: 1,
       tier: '',
       version: '',
       storage: '',
@@ -29,19 +29,32 @@ export default class Componente extends React.Component {
     });
   }
 
-  handleSubmit(event) {
-    alert('form submitted: ' + JSON.stringify(this.state));
+  async handleSubmit(event) {
     event.preventDefault();
+    fetch(`${process.env.REACT_APP_BACKEND}/infrastructure/create`, {
+      method: 'POST',
+      body: JSON.stringify(this.state),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   render() {
     let conditionalForm;
     if (this.state.tipoComponente === 'infraestructura') {
-      conditionalForm = 
+      conditionalForm =
         <div className="col-12 col-sm-6">
           <div className="form-group">
             <label htmlFor="componenteSelect">Componente</label>
-            <select className="form-control" id="componenteSelect" name="componente" value={this.state.componente} onChange={this.handleInputChange}>
+            <select className="form-control" id="componenteSelect" name="componente" value={this.state.componente}
+                    onChange={this.handleInputChange}>
               <option value="" disabled>Seleccione un tipo</option>
               <option value="kubernetes cluster">Kubernetes cluster</option>
               <option value="mysql">Mysql</option>
@@ -50,13 +63,14 @@ export default class Componente extends React.Component {
         </div>;
     }
     return (
-      <main style={{ padding: "1.5rem 2rem" }}>
+      <main style={{padding: "1.5rem 2rem"}}>
         <h2>Crear Componente</h2>
         <form className="row mt-4" onSubmit={this.handleSubmit}>
           <div className="col-12 col-sm-6">
             <div className="form-group">
-              <label htmlFor="ambienteSelect">Ambiente</label>
-              <select className="form-control" id="ambienteSelect" name="ambiente" value={this.state.ambiente} onChange={this.handleInputChange}> 
+              <label htmlFor="environmentSelect">Ambiente</label>
+              <select className="form-control" id="environmentSelect" name="environment" value={this.state.environment}
+                      onChange={this.handleInputChange}>
                 <option value="" disabled>Seleccione un ambiente</option>
                 <option value="dev">dev</option>
                 <option value="qa">qa</option>
@@ -66,14 +80,17 @@ export default class Componente extends React.Component {
           </div>
           <div className="col-12 col-sm-6">
             <div className="form-group">
-              <label htmlFor="clienteInput">Cliente</label>
-              <input type="text" className="form-control" id="clienteInput" name="cliente" value={this.state.cliente} placeholder="Nombre del cliente o proyecto relacionado. Ej: Core, Tecnoandina" onChange={this.handleInputChange} />
+              <label htmlFor="clientInput">Cliente</label>
+              <input type="text" className="form-control" id="clientInput" name="client" value={this.state.client}
+                     placeholder="Nombre del cliente o proyecto relacionado. Ej: Core, Tecnoandina"
+                     onChange={this.handleInputChange}/>
             </div>
           </div>
           <div className="col-12 col-sm-6">
             <div className="form-group">
               <label htmlFor="tipoComponenteSelect">Tipo de Componente</label>
-              <select className="form-control" id="tipoComponenteSelect" name="tipoComponente" value={this.state.tipoComponente} onChange={this.handleInputChange}>
+              <select className="form-control" id="tipoComponenteSelect" name="tipoComponente"
+                      value={this.state.tipoComponente} onChange={this.handleInputChange}>
                 <option value="">Seleccione un tipo</option>
                 <option value="infraestructura">Infraestructura</option>
                 <option value="servicio">Servicio</option>
@@ -83,7 +100,8 @@ export default class Componente extends React.Component {
           <div className="col-12 col-sm-6">
             <div className="form-group">
               <label htmlFor="resourceGroupSelect">Grupo de Recurso</label>
-              <select className="form-control" id="resourceGroupSelect" name="resourceGroup" value={this.state.resourceGroup} onChange={this.handleInputChange}>
+              <select className="form-control" id="resourceGroupSelect" name="resourceGroup"
+                      value={this.state.resourceGroup} onChange={this.handleInputChange}>
                 <option value="">Seleccione un grupo</option>
                 <option value="RG-Service-Catalog">RG-Service-Catalog</option>
               </select>
@@ -95,7 +113,8 @@ export default class Componente extends React.Component {
               <div className="col-12 col-sm-6">
                 <div className="form-group">
                   <label htmlFor="vmSizeSelect">VM size</label>
-                  <select className="form-control" id="vmSizeSelect" name="vmSize" value={this.state.vmSize} onChange={this.handleInputChange}>
+                  <select className="form-control" id="vmSizeSelect" name="vmSize" value={this.state.vmSize}
+                          onChange={this.handleInputChange}>
                     <option value="" disabled>Seleccione un tipo</option>
                     <option value="Standard_D2a_v2">Standard_D2a_v2</option>
                     <option value="Standard_D4_v3">Standard_D4_v3</option>
@@ -104,8 +123,9 @@ export default class Componente extends React.Component {
               </div>
               <div className="col-12 col-sm-6">
                 <div className="form-group">
-                  <label htmlFor="numeroNodosSelect">Numero de Nodos</label>
-                  <select className="form-control" id="numeroNodosSelect" name="numero_nodos" value={this.state.numero_nodos} onChange={this.handleInputChange}>
+                  <label htmlFor="nodeNumberSelect">Numero de Nodos</label>
+                  <select className="form-control" id="nodeNumberSelect" name="nodeNumber" value={this.state.nodeNumber}
+                          onChange={this.handleInputChange}>
                     <option value={null} disabled>Seleccione un numero</option>
                     <option value={1}>1</option>
                     <option value={2}>2</option>
@@ -121,7 +141,8 @@ export default class Componente extends React.Component {
               <div className="col-12 col-sm-4">
                 <div className="form-group">
                   <label htmlFor="tierSelect">Tier</label>
-                  <select className="form-control" id="tierSelect" name="tier" value={this.state.tier} onChange={this.handleInputChange}>
+                  <select className="form-control" id="tierSelect" name="tier" value={this.state.tier}
+                          onChange={this.handleInputChange}>
                     <option value="" disabled>Seleccione</option>
                     <option value="B_Gen5_1">B_Gen5_1</option>
                     <option value="GP_Gen5_1">GP_Gen5_1</option>
@@ -131,7 +152,8 @@ export default class Componente extends React.Component {
               <div className="col-12 col-sm-4">
                 <div className="form-group">
                   <label htmlFor="versionSelect">Version</label>
-                  <select className="form-control" id="versionSelect" name="version" value={this.state.version} onChange={this.handleInputChange}>
+                  <select className="form-control" id="versionSelect" name="version" value={this.state.version}
+                          onChange={this.handleInputChange}>
                     <option value={null} disabled>Seleccione la version</option>
                     <option value={5}>5</option>
                     <option value={7}>7</option>
@@ -142,7 +164,9 @@ export default class Componente extends React.Component {
               <div className="col-12 col-sm-4">
                 <div className="form-group">
                   <label htmlFor="storageSelect">storage</label>
-                  <input type="number" className="form-control" id="storageSelect" name="storage" value={this.state.storage} onChange={this.handleInputChange} placeholder="Almacenamiento base aprovisionado en megabytes" />
+                  <input type="number" className="form-control" id="storageSelect" name="storage"
+                         value={this.state.storage} onChange={this.handleInputChange}
+                         placeholder="Almacenamiento base aprovisionado en megabytes"/>
                 </div>
               </div>
             </React.Fragment>
