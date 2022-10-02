@@ -116,7 +116,7 @@ export default class Componente extends React.Component {
                   <select className="form-control" id="vmSizeSelect" name="vmSize" value={this.state.vmSize}
                           onChange={this.handleInputChange}>
                     <option value="" disabled>Seleccione un tipo</option>
-                    <option value="Standard_D2a_v2">Standard_D2a_v2</option>
+                    <option value="Standard_D2_v3">Standard_D2_v3</option>
                     <option value="Standard_D4_v3">Standard_D4_v3</option>
                   </select>
                 </div>
