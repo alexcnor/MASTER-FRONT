@@ -12,7 +12,7 @@ variables:
   - name: 'imageName'
     value: 'service-catalog-front'
   - name: 'imageTag'
-    value: 'v1.0.$(build.buildId)'
+    value: '$(build.BuildNumber)'
 
 stages:
   - stage: init
@@ -85,7 +85,7 @@ stages:
           - task: PublishPipelineArtifact@1
             inputs:
               targetPath: '$(Build.ArtifactStagingDirectory)'
-              artifactName: 'image'
+              artifactName: 'image-$(imageName)'
   - stage:
     dependsOn: ['docker', 'security']
     displayName: Publish Artifact
@@ -95,11 +95,11 @@ stages:
           - task: DownloadPipelineArtifact@2
             inputs:
               source: 'current'
-              artifact: 'image'
+              artifact: 'image-$(imageName)'
               path: '$(Build.ArtifactStagingDirectory)'
           - bash: 'cd $(Build.ArtifactStagingDirectory) && ls -la'
           - task: PublishBuildArtifacts@1
             displayName: 'Publish Artifact'
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'service-catalog'
+              ArtifactName: '$(imageName)'
