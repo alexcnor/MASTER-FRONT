@@ -155,8 +155,9 @@ export default class Componente extends React.Component {
                   <select className="form-control" id="versionSelect" name="version" value={this.state.version}
                           onChange={this.handleInputChange}>
                     <option value={null} disabled>Seleccione la version</option>
-                    <option value={8}>8</option>
-                    <option value={5}>5</option>
+                    <option value={8.0}>8.0</option>
+                    <option value={5.7}>5.7</option>
+                    <option value={5.6}>5.6</option>
                   </select>
                 </div>
               </div>
