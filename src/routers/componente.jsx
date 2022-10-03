@@ -13,7 +13,7 @@ export default class Componente extends React.Component {
       vmSize: '',
       nodeNumber: 1,
       tier: '',
-      version: 8,
+      version: '8.0',
       storage: '',
     };
     this.handleInputChange = this.handleInputChange.bind(this);
