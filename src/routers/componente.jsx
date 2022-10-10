@@ -40,9 +40,11 @@ export default class Componente extends React.Component {
     })
       .then((response) => {
         console.log(response);
+        alert('Creado con éxito');
       })
       .catch((err) => {
         console.error(err);
+        alert('Error al solicitar la creación');
       });
   }
 
